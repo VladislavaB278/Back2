@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  database:
+    image: postgres:latest
+    container_name: database
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - pgconf:/etc/postgresql
+      - pglog:/var/log/postgresqlcls
+    command: -p 5431
+    expose:
+      - 5431
+    env_file:
+      - .env-non-dev
+    environment:
+      POSTGRES_PASSWORD: "S1DjDkl2daW"
+
+  app:
+    build:
+      context: .
+    container_name: application
+    ports:
+      - 9999:9999
+    depends_on:
+      - database
+
+
+volumes:
+  pgdata:
+    driver: local
+  pgconf:
+    driver: local
+  pglog:
+    driver: local
